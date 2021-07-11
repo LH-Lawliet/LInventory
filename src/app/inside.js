@@ -6,6 +6,18 @@ import { Items } from './items.js'
 import { ButtonsPanel } from './buttonsPanel.js'
 
 
+let arraysMatch = function (arr1, arr2) {
+	// Check if the arrays are the same length
+	if (arr1.length !== arr2.length) return false;
+	// Check if all items exist and are in the same order
+	for (var i = 0; i < arr1.length; i++) {
+		if (arr1[i] !== arr2[i]) return false;
+	}
+	// Otherwise, return true
+	return true;
+};
+
+
 function dropItem(item) {
     if (item.parent === "itemsA") {
         delete itemsA[item.code]
@@ -49,12 +61,22 @@ let defaultButtons = [
     },
 ]
 
+function isItemInInv(item, inv) {
+    for (let k in inv) {
+        let check = inv[k]
+        console.log(k, check.name, item.name, check.metadata, item.metadata)
+        if (check.name === item.name && arraysMatch(check.metadata,item.metadata)) {
+            return inv[k]
+        }
+    }
+}
+
 
 function dropInItemsZone(item, zone) {
     if (item.parent !== zone) {
         let itemTable
         let dropTable
-        if (item.parent == "itemsA") {
+        if (item.parent === "itemsA") {
             itemTable = itemsA
             dropTable = itemsB
         } else {
@@ -63,64 +85,118 @@ function dropInItemsZone(item, zone) {
         }
 
         delete itemTable[item.code]
-        dropTable[item.code] = item.data
 
+        let targetItem = isItemInInv(item.data, dropTable)
+        if (targetItem) {
+            targetItem.quantity += item.data.quantity
+        } else {
+            dropTable[item.code] = item.data
+        }     
         item.parentState({"itemsA":itemsA, "itemsB":itemsB})
     }
 } 
 
-let itemsA = {
-    "WEAPON_9MM":{
+let itemsA = [
+    {
         "name":"Pistolet 9mm",
         "quantity":1,
-        "category":"WEAPON"
+        "metadata":{"ammoType":"AMMO_SHOTGUN","weight":0.03,"type":"ammo"}
     },
-    "BREAD":{
-        "name":"Pain",
-        "quantity":4
-    },
-    "TOPS_21_3":{
-        "name":"Haut n°21 couleur n°3",
+    {   
+        "name":"Carte d'identité aze aze",
         "quantity":1,
-        "category":"CLOTH"
+        "metadata":{"type":"identity","playerId":144}
     },
-}
-
-for (let i = 0; i<100; i++) {
-    itemsA[i] = {
-        "name":"Nom "+i,
-        "quantity":i
+    {   
+        "name":"Perceuse",
+        "quantity":1,
+        "metadata":{"weight":0.9}
+    },
+    {
+        "name":"Montre de luxe homme",
+        "quantity":1,
+        "metadata":{
+            "weight":0.15,
+            "useEvent":"vlife:loadClothItem",
+            "useEventData":{
+                "RightArmAccessoriesColor":0,
+                "model":"mp_m_freemode_01",
+                "RightArmAccessories":11
+            }
+        }
+    },
+    {
+        "name":"100g d'or",
+        "quantity":1,
+        "metadata":{"weight":0.1},
+    },
+    {
+        "name":"Pied de biche",
+        "quantity":1,
+        "metadata":{
+            "serial":"2TYV11",
+            "custom":[],
+            "weight":2.3,
+            "type":"weapon"
+        },
+    },
+    {
+        "name":"Hachette",
+        "quantity":1,
+        "metadata":{
+            "serial":"MX90OK",
+            "custom":[],
+            "weight":1.4,
+            "type":"weapon"
+        }
+    },
+    {
+        "name":"Munition Fusil à pompe",
+        "quantity":20,
+        "metadata":{
+            "ammoType":"AMMO_SHOTGUN",
+            "weight":0.03,
+            "type":"ammo"
+        }
     }
-}
+]
 
-let itemsB = {
-    "BREAD":{
-        "name":"Pain",
-        "quantity":4
-    },
-    "KEYS_AZERTY":{
-        "name":"Clef de voiture AZERTY",
+let itemsB = [
+    {
+        "name":"Club de golf",
         "quantity":1,
-        "category":"KEY"
+        "metadata":{
+            "serial":"39ZWBL",
+            "custom":[],
+            "weight":0.3,
+            "type":"weapon"
+        }
     },
-    "KEYS_RTYUIO":{
-        "name":"Clef de voiture RTYUIO",
-        "quantity":1,
-        "category":"KEY"
-    },
-    "WATER":{
-        "name":"Bouteille d'eau",
-        "quantity":10
-    },
-}
 
-/*for (let i = 0; i<1000; i++) {
-    itemsB[i] = {
-        "name":"Nom "+i,
-        "quantity":i
+    {
+        "name":"Baskets Prolaps vertes",
+        "quantity":1,
+        "metadata":{
+            "weight":0.2,
+            "useEvent":"vlife:loadClothItem",
+            "useEventData":{
+                "shoesColor":0,
+                "model":"mp_m_freemode_01",
+                "shoes":0
+            }
+        }
+    },
+
+    {
+        "name":"Munition Fusil à pompe",
+        "quantity":40,
+        "metadata":{
+            "ammoType":"AMMO_SHOTGUN",
+            "weight":0.03,
+            "type":"ammo"
+        }
     }
-}*/
-
+]
 
 export class Inside extends React.Component {
     state = {"itemsA":itemsA, "itemsB":itemsB};

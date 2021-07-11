@@ -6,15 +6,15 @@ let categories = {
     },
     "Vêtements" : {
         "name":"Vêtements",
-        "metadataType":"CLOTH"
+        "metadataType":["cloth"]
     },
     "Clefs" : {
         "name":"Clefs",
-        "metadataType":"KEY"
+        "metadataType":["key"]
     },
     "Armes" : {
         "name":"Armes",
-        "metadataType":"WEAPON"
+        "metadataType":["weapon","ammo"]
     },
 }
 
@@ -28,8 +28,7 @@ export class Categories extends React.Component {
             if (this.changeAbove) {
                 this.changeAbove(categories[this.selected])
             }
-        }
-        
+        }       
         
     }
     render() {
