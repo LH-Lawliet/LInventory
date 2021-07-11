@@ -60,6 +60,6 @@ export class Categories extends React.Component {
             }
             i++
         }
-        return (<div id="categories">{list}</div>)
+        return (<div id="categories" className="disable-select">{list}</div>)
     }
 }

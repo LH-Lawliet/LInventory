@@ -19,6 +19,7 @@ function Item(data){
         <div className="invItem disable-select" ref={dragRef} style={{opacity: isDragging ? 0.0 : 0.8,}}>
             <img className="itemImg disable-dnd" src={getLogo(invItemData.data.name)} alt={invItemData.id}/>
             <span className="itemQtty">{invItemData.data.quantity || 1}</span>
+            <span className="itemWeight">{(invItemData.data.metadata.weight || 0)*(invItemData.data.quantity || 1)} kg</span>
             <span className="itemName">{invItemData.data.name}</span>
         </div>
     );

@@ -117,6 +117,7 @@ let itemsA = [
         "quantity":1,
         "metadata":{
             "weight":0.15,
+            "type":"cloth",
             "useEvent":"vlife:loadClothItem",
             "useEventData":{
                 "RightArmAccessoriesColor":0,
@@ -178,6 +179,7 @@ let itemsB = [
         "quantity":1,
         "metadata":{
             "weight":0.2,
+            "type":"cloth",
             "useEvent":"vlife:loadClothItem",
             "useEventData":{
                 "shoesColor":0,

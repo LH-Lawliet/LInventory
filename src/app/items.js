@@ -48,7 +48,7 @@ export class Items extends React.Component {
         if (filter) {
             for (const codeName in items) {
                 let item={"code":codeName,"data":items[codeName]}
-                if ((filter && !filter.metadataType && !(item.data.metadata && item.data.metadata.type)) || (filter && filter.metadataType && filter.metadataType.includes(item.data.metadata.type))) {
+                if ((filter && !filter.metadataType && !(item.data.metadata && item.data.metadata.type)) || (filter && filter.metadataType && item.data.metadata.type && filter.metadataType.includes(item.data.metadata.type))) {
                     item.parentState = parentState
                     item.parent = parent
                     final.push(renderItem(item))
