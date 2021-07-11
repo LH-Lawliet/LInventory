@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap');
+body {
+    background-image: url("http://www.igta5.com/images/gameplay-1-the-famous-zancudo-river.jpg");
+    background-size: cover;
+    color:rgba(205,205,205,0.8);
+    font-family: 'Noto Sans JP', sans-serif;
+    overflow-y: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(205,205,205,0.3);
+    border-radius: 2.5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(205,205,205,0.5);
+}
+
+.disable-select {
+    -webkit-user-select: none;  
+    -moz-user-select: none;    
+    -ms-user-select: none;      
+    user-select: none;
+}
+
+.disable-dnd {
+    pointer-events: none;
+}
+
+.enable-select {
+    -webkit-user-select: block;  
+    -moz-user-select: block;    
+    -ms-user-select: block;      
+    user-select: block;
+    pointer-events: visible;
+}
+
+h1 {
+    color:rgba(205,205,205,1.0);
+    margin: 0px;
+    margin-bottom: 1.5vh;
+}
+
+.buttonAsText {
+    border: 0;
+    background-color: transparent;
+    color: rgba(205,205,205,0.8);
+    font-family: 'Noto Sans JP', sans-serif;
+    display: inline-block;
+    font-size: 1.5vh;
+}
+
+.buttonAsText:hover {
+    color: rgba(205,205,205,0.9);
+}
+
+.selected{
+    font-size: 1.6vh;
+    color: rgba(205,205,205,1.0);
+}
+
+#inventory {
+    position:absolute;
+    background-color: rgba(50,50,50,0.03);
+    left: 5%;
+    top: 5%;
+    height:90%;
+    width:90%;
+    border-radius: 30px;
+}
+
+#inside {
+    height:80%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonsPanel {
+    display: inline-block;
+    width:20%;
+}
+
+.button { 
+    margin-left: 5%;
+    width: 90%;
+    height: 5vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    border-radius: 10px;
+
+    background-color: rgba(50,50,50,0.4);
+    border: 1px solid rgba(50,50,50,0.2);
+    color:rgba(205,205,205,0.8);
+    transition: 0.2s;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.inventorySide {
+    width:100%;
+    height:100%;
+}
+
+.items {
+    height:90%;
+    width:100%;
+    display:inline-block;
+    overflow-y: scroll;
+    transition: 0.1s;
+    border-radius: 3px;
+}
+
+.invItem {
+    background-color: rgba(50,50,50,0.1);
+    height:15%;
+    width:10.8vh;
+    margin:0.47vh;
+    border-radius: 10px;
+    border: 1px solid rgba(50,50,50,0.2);
+    transform: scale(1.0);
+    display: inline-block;
+    transition: 0.05s;
+}
+
+.invItem:hover{ 
+    transform: scale(1.05);
+    background-color: rgba(50,50,50,0.6);
+}
+
+.itemQtty {
+    position: fixed;
+    top:-1px;
+    left:5px;
+    color:rgba(205,205,205,0.5)
+}
+
+.itemName {
+    position: fixed;
+    height: 3vh;
+    line-height: 1.4vh;
+    bottom:0vh;
+    text-align: center;
+    font-size: 90%;
+    margin-left: 0.5vh;
+    width: 9.8vh;
+    overflow:hidden;
+}
+
+.itemImg {
+    position: fixed;
+    max-height: 55%;
+    max-width:80%;
+
+    top: 0;
+    bottom: 1.5vh;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
