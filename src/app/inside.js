@@ -220,7 +220,7 @@ export class Inside extends React.Component {
             <DndProvider backend={HTML5Backend}>
                 <div id="inside">                
                     <Items dropCallback={dropInItemsZone} items={this.state['itemsA']} name={"Inventaire A"} parent="itemsA" minQuantity={this.getMaxItem} state={this.changeState}/>
-                    <ButtonsPanel value={defaultButtons} state={this.changeState}/>
+                    <ButtonsPanel value={defaultButtons} state={this.changeState} minQuantity={this.getMaxItem}/>
                     <Items dropCallback={dropInItemsZone} items={this.state['itemsB']} name={"Inventaire B"} parent="itemsB" minQuantity={this.getMaxItem} state={this.changeState}/>
                 </div>
             </DndProvider>
