@@ -1,21 +1,11 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { arraysMatch } from '../utils.js'
+
 
 import { Items } from './items.js'
 import { ButtonsPanel } from './buttonsPanel.js'
-
-
-let arraysMatch = function (arr1, arr2) {
-	// Check if the arrays are the same length
-	if (arr1.length !== arr2.length) return false;
-	// Check if all items exist and are in the same order
-	for (var i = 0; i < arr1.length; i++) {
-		if (arr1[i] !== arr2[i]) return false;
-	}
-	// Otherwise, return true
-	return true;
-};
 
 
 function dropItem(item) {
@@ -27,24 +17,10 @@ function dropItem(item) {
     item.parentState({"itemsA":itemsA, "itemsB":itemsB})
 }
 
-function useItem(item) {
-    let table = null
-    if (item.parent === "itemsA") {
-        table = itemsA
-    } else if (item.parent === "itemsB") {
-        table = itemsB
-    }
-    if (table) {
-        if (table[item.code].quantity>1) {
-            table[item.code].quantity -= 1
-        } else {
-            delete table[item.code]
-        }
-        item.parentState({"itemsA":itemsA, "itemsB":itemsB})
-    }
-}
-
 let defaultButtons = [
+    {
+        "defaultQuantity":1,
+    },
     {
         "text":"Jeter",
         "callback":dropItem
@@ -55,24 +31,43 @@ let defaultButtons = [
             console.log("give")
         }
     },
-    {
-        "text":"Utiliser",
-        "callback":useItem
-    },
 ]
 
 function isItemInInv(item, inv) {
     for (let k in inv) {
         let check = inv[k]
-        console.log(k, check.name, item.name, check.metadata, item.metadata)
         if (check.name === item.name && arraysMatch(check.metadata,item.metadata)) {
-            return inv[k]
+            return [inv[k], k]
         }
     }
 }
 
+function removeItem(item, inv, quantity) {
+    quantity = quantity || 1
 
-function dropInItemsZone(item, zone) {
+    let [nItem, nKey] = isItemInInv(item, inv)
+    if (nItem.quantity>quantity) {
+        nItem.quantity -= quantity
+    } else {
+        delete inv[nKey]
+    }
+}
+
+function addItem(item, inv, quantity) {
+    quantity = quantity || 1
+
+    let nItem = isItemInInv(item, inv)
+    if (nItem) {
+        nItem[0].quantity += quantity
+    } else {
+        let copy = {...item}
+        copy["quantity"]=quantity
+        inv.push(copy)
+    } 
+}
+
+
+function dropInItemsZone(item, zone, quantity) {
     if (item.parent !== zone) {
         let itemTable
         let dropTable
@@ -83,15 +78,9 @@ function dropInItemsZone(item, zone) {
             itemTable = itemsB
             dropTable = itemsA
         }
-
-        delete itemTable[item.code]
-
-        let targetItem = isItemInInv(item.data, dropTable)
-        if (targetItem) {
-            targetItem.quantity += item.data.quantity
-        } else {
-            dropTable[item.code] = item.data
-        }     
+        let itemCopy = {...itemTable[item.code]};
+        removeItem(itemCopy, itemTable, quantity)
+        addItem(itemCopy, dropTable, quantity)
         item.parentState({"itemsA":itemsA, "itemsB":itemsB})
     }
 } 
@@ -153,7 +142,7 @@ let itemsA = [
     },
     {
         "name":"Munition Fusil à pompe",
-        "quantity":20,
+        "quantity":3,
         "metadata":{
             "ammoType":"AMMO_SHOTGUN",
             "weight":0.03,
@@ -201,26 +190,38 @@ let itemsB = [
 ]
 
 export class Inside extends React.Component {
-    state = {"itemsA":itemsA, "itemsB":itemsB};
+    state = {"itemsA":itemsA, "itemsB":itemsB, "quantity":1};
     
+    constructor() { 
+        super()
+        this.changeState = this.changeState.bind(this)
+        this.getMaxItem = this.getMaxItem.bind(this)
+    }
+
     componentDidMount() {
         this.setState({"itemsA":itemsA, "itemsB":itemsB})
         for (let button in defaultButtons) {
-            defaultButtons[button].callback.bind(this)  
+            if (defaultButtons[button].callback) {
+                defaultButtons[button].callback.bind(this) 
+            }
         }
     }
 
-    changeState = (data) => {
+    changeState (data) {
         this.setState(data)
+    }
+
+    getMaxItem () {
+        return this.state.quantity
     }
 
     render() {
         return (
             <DndProvider backend={HTML5Backend}>
                 <div id="inside">                
-                    <Items dropCallback={dropInItemsZone} items={this.state['itemsA']} name={"Inventaire A"} parent="itemsA" state={this.changeState}/>
-                    <ButtonsPanel value={defaultButtons}/>
-                    <Items dropCallback={dropInItemsZone} items={this.state['itemsB']} name={"Inventaire B"} parent="itemsB" state={this.changeState}/>
+                    <Items dropCallback={dropInItemsZone} items={this.state['itemsA']} name={"Inventaire A"} parent="itemsA" minQuantity={this.getMaxItem} state={this.changeState}/>
+                    <ButtonsPanel value={defaultButtons} state={this.changeState}/>
+                    <Items dropCallback={dropInItemsZone} items={this.state['itemsB']} name={"Inventaire B"} parent="itemsB" minQuantity={this.getMaxItem} state={this.changeState}/>
                 </div>
             </DndProvider>
         )
