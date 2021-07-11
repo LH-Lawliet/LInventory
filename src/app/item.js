@@ -13,7 +13,7 @@ function Item(data){
         type: "invItem",
         item: invItemData,
         collect: (monitor) => ({
-          isDragging: monitor.isDragging(),
+            isDragging: monitor.isDragging(),
         }),
     });
 
@@ -29,7 +29,6 @@ function Item(data){
 
 
 export class InvItem extends React.Component {
-    
     constructor (itemData) {
         super(itemData);
         this.item = itemData.value;
