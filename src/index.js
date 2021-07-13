@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { render } from 'react-dom'
-import { App } from './app/app.js'
+import { Inventory } from './app/inventory/app.js'
 
 render(
-    <App/>, 
-    document.querySelector('#app')
+    <Inventory/>, 
+    document.querySelector('#inventoryApp')
 )

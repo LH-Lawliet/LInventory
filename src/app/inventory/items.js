@@ -1,5 +1,5 @@
 import React from 'react';
-import { round } from '../utils.js'
+import { round } from '../../utils.js'
 import { useDrop } from "react-dnd";
 
 import { InvItem } from './item.js'
@@ -15,10 +15,30 @@ function ItemsList(data) {
     });
     return (
         <div className="items" ref={dropRef} style={{ backgroundColor: isOver ? "rgba(50,50,50,0.3)" : "transparent"}}>
-            {data.renderItems(data.state.items, data.state.filter, data.parent, data.parentState, data.renderItem, data.minQuantity)}
+            {data.renderItems(data.state.items, data.state.filter, data.parent, data.parentState, data.renderItem, data.minQuantity, data.isFilterAvailable)}
         </div>
     );
 }
+
+
+let availableCategories = {
+    "Autres" : {
+        "name":"Autres",
+    },
+    "Vêtements" : {
+        "name":"Vêtements",
+        "metadataType":["cloth"]
+    },
+    "Clefs" : {
+        "name":"Clefs",
+        "metadataType":["key"]
+    },
+    "Armes" : {
+        "name":"Armes",
+        "metadataType":["weapon","ammo"]
+    },
+}
+
 
 
 export class Items extends React.Component {
@@ -41,17 +61,28 @@ export class Items extends React.Component {
         };
     }
 
+    isFilterAvailable(expected) {
+        console.log(availableCategories)
+        for (let k in availableCategories) {
+            let filter = availableCategories[k]
+            if (filter.metadataType && filter.metadataType.includes(expected)) {
+                return true
+            }
+        }
+        return false
+    }
+
     renderItem(item) {
         return <InvItem key={item.code} value={item}/>;
     }
 
-    renderItems(items, filter, parent, parentState, renderItem, minQuantity) {
+    renderItems(items, filter, parent, parentState, renderItem, minQuantity, isFilterAvailable) {
         let final = []
         if (filter) {
             for (const codeName in items) {
                 let item={"code":codeName,"data":items[codeName]}
                 if (minQuantity()<=(item.data.quantity || 1)) {
-                    if ((filter && !filter.metadataType && !(item.data.metadata && item.data.metadata.type)) || (filter && filter.metadataType && item.data.metadata.type && filter.metadataType.includes(item.data.metadata.type))) {
+                    if ((filter && !filter.metadataType && (item.data.metadata && !isFilterAvailable(item.data.metadata.type))) || (filter && filter.metadataType && item.data.metadata.type && filter.metadataType.includes(item.data.metadata.type))) {
                         item.parentState = parentState
                         item.parent = parent
                         final.push(renderItem(item))
@@ -81,9 +112,9 @@ export class Items extends React.Component {
     render() {
         return (
             <div className="inventorySide">
-                <h3 className="disable-select">{this.name} | {round(this.calculateTotalWeight(this.state.items),2)}/{this.allowedWeight} kg</h3>
-                <Categories className="disable-select" changeItemsFilter={(filter) => this.changeItemsFilter(filter) }/>
-                <ItemsList dropCallback={this.dropCallback} renderItems={this.renderItems} renderItem={this.renderItem} state={this.state} parent={this.parent} parentState={this.parentState} minQuantity={this.minQuantity}/>
+                <h3 className="inventoryName disable-select">{this.name} | {round(this.calculateTotalWeight(this.state.items),2)}/{this.allowedWeight} kg</h3>
+                <Categories availableCategories={availableCategories} className="disable-select" changeItemsFilter={(filter) => this.changeItemsFilter(filter) }/>
+                <ItemsList isFilterAvailable={this.isFilterAvailable} dropCallback={this.dropCallback} renderItems={this.renderItems} renderItem={this.renderItem} state={this.state} parent={this.parent} parentState={this.parentState} minQuantity={this.minQuantity}/>
                 <h1>{this.state.minQuantity}</h1>
             </div>
         )

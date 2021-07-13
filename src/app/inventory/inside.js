@@ -1,7 +1,7 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { arraysMatch } from '../utils.js'
+import { arraysMatch } from '../../utils.js'
 
 
 import { Items } from './items.js'

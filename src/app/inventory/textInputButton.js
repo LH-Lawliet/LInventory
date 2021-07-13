@@ -37,7 +37,6 @@ export class TextInputButton extends React.Component {
         this.data = buttonData.value.data;
         this.parentState = buttonData.parentState
         this.minQuantity = buttonData.minQuantity
-        console.log(this.minQuantity)
     }
 
     render() {

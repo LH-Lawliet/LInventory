@@ -1,11 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap');
-body {
-    background-image: url("http://www.igta5.com/images/gameplay-1-the-famous-zancudo-river.jpg");
-    background-size: cover;
-    color:rgba(205,205,205,0.8);
-    font-family: 'Noto Sans JP', sans-serif;
-    overflow-y: hidden;
-}
 
 ::-webkit-scrollbar {
     width: 5px;
@@ -40,9 +33,10 @@ body {
     pointer-events: visible;
 }
 
-h1 {
+#InventoryTitle {
     color:rgba(205,205,205,1.0);
     margin: 0px;
+    margin-left: 1vh;
     margin-bottom: 1.5vh;
 }
 
@@ -72,6 +66,9 @@ h1 {
     height:90%;
     width:90%;
     border-radius: 30px;
+    color:rgba(205,205,205,0.8);
+    font-family: 'Noto Sans JP', sans-serif;
+    overflow-y: hidden;
 }
 
 #inside {
@@ -85,6 +82,10 @@ h1 {
 .buttonsPanel {
     display: inline-block;
     width:20%;
+}
+
+.inventoryName {
+    margin-left: 0.5vh;
 }
 
 .button { 
@@ -144,7 +145,7 @@ h1 {
 
 .invItem {
     background-color: rgba(50,50,50,0.1);
-    height:15%;
+    height:11vh;
     width:10.8vh;
     margin:0.47vh;
     border-radius: 10px;
@@ -156,7 +157,6 @@ h1 {
 
 .invItem:hover{ 
     transform: scale(1.05);
-    background-color: rgba(50,50,50,0.6);
 }
 
 .itemQtty {

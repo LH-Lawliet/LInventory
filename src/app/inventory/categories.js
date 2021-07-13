@@ -1,32 +1,15 @@
 import React from 'react';
 
-let categories = {
-    "Autres" : {
-        "name":"Autres",
-    },
-    "Vêtements" : {
-        "name":"Vêtements",
-        "metadataType":["cloth"]
-    },
-    "Clefs" : {
-        "name":"Clefs",
-        "metadataType":["key"]
-    },
-    "Armes" : {
-        "name":"Armes",
-        "metadataType":["weapon","ammo"]
-    },
-}
-
 export class Categories extends React.Component {
     constructor (data) {
         super();
 
         this.changeAbove = data.changeItemsFilter
+        this.categories = data.availableCategories
         if (!this.selected) {
             this.selected = "Autres";
             if (this.changeAbove) {
-                this.changeAbove(categories[this.selected])
+                this.changeAbove(this.categories[this.selected])
             }
         }       
         
@@ -34,7 +17,7 @@ export class Categories extends React.Component {
     render() {
         let list = []
         let i=1
-        for (let categorie in categories) {
+        for (let categorie in this.categories) {
             let className = "buttonAsText"
             if (categorie === this.selected) {
                 className = className+" selected"
@@ -46,14 +29,14 @@ export class Categories extends React.Component {
                         this.setState({});
 
                         if (this.changeAbove) {
-                            this.changeAbove(categories[categorie])
+                            this.changeAbove(this.categories[categorie])
                         }
                     }
                 }>
                     {categorie}
                 </button>
             )
-            if (i!== Object.keys(categories).length) {
+            if (i!== Object.keys(this.categories).length) {
                 list.push(
                     <span key={categorie+" span"}>|</span>
                 )
